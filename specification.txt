@@ -1,0 +1,9 @@
+Program Specification
+1. The program should ask the user for start and end date to evaluate spendings
+2. The program should open text files in sequential order, starting from earliest specified date
+3. The program should read each text file opened and write into a new CSV file  the contents of each opened text file and ALSO THE DATE AS THE HEADER
+BLANK SPACES SHOULD BE LEFT BETWEEN EACH DATE
+4. Once the above is done, the program should close then reopen the output file, this time for reading
+5. The program should parse the contents in the output file, eg:  add up the spendings for multiple entries
+6. Once parsing is complete, the program should write to a new CSV file, where each row should be ITEM, SPENDING
+7. Finally, the program should output the maximum sum of money spent for an item.

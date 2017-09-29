@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# convert any DOS text files in directory to unix
+
+echo find . -name *.txt |xargs dos2unix 

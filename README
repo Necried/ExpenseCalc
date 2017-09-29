@@ -1,0 +1,6 @@
+Just a fun project to calculate total monthly expenses from multiple text files
+Currently incomplete
+There are segmentation faults when succesfully reading the first text
+file in the directory, a fix has not been done.
+
+
