@@ -14,7 +14,8 @@ sllnode* create(char *item, double price)
     sllnode *new_head = malloc(sizeof(sllnode));
     if (new_head != NULL)
     {
-        new_head -> item = item;
+        new_head -> item = malloc(sizeof(char) * 40);
+        strcpy(new_head -> item, item);
         new_head -> price = price;
         new_head -> next = NULL;
     }
@@ -33,7 +34,7 @@ bool append(sllnode *head, char *item, double price)
 {
     // Initialize a pointer
     sllnode *trav = head;
-    
+
     // Iterate through the linked list
     while (trav != NULL)
     {
@@ -41,7 +42,7 @@ bool append(sllnode *head, char *item, double price)
 		{
         	trav -> price += price;
 			return true;
-		}        
+		}
 		else
             trav = trav -> next;
     }
@@ -55,11 +56,12 @@ sllnode* insert(sllnode *head, char *item, double price)
 
     if (new_node == NULL)
         return NULL;
-    
-    new_node -> item = item;
+
+    new_node -> item = malloc(sizeof(char) * 40);
+    strcpy(new_node -> item, item);
     new_node -> price = price;
     new_node -> next = head;
-    
+
     head = new_node;
 
     return head;
@@ -72,7 +74,7 @@ void destroy(sllnode* head)
         return;
     else
         destroy(head -> next);
-
+    free(head -> item);
     free(head);
 }
 
