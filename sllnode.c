@@ -5,9 +5,8 @@ Defines linked-list functionality for key-value pairs
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "sllnode.h"
-
-
 
 // Create a new linked list. Returns a pointer to the head of the list.
 sllnode* create(char *item, double price)
@@ -38,7 +37,7 @@ bool append(sllnode *head, char *item, double price)
     // Iterate through the linked list
     while (trav != NULL)
     {
-        if (trav -> item == item)
+        if (strcmp(trav -> item, item) == 0)
 		{
         	trav -> price += price;
 			return true;
