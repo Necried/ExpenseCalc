@@ -202,7 +202,6 @@ int main(int argc, char *argv[])
 			if (append(head, charbuff, dollar) == false)
 			{
 				head = insert(head, charbuff, dollar);
-				printf("need to create a new one\n");
 			}
 			// read next character in file
 			c = fgetc(inptr);
@@ -220,7 +219,10 @@ int main(int argc, char *argv[])
 	max = trav -> price;
 	min = trav -> price;
 
-	// Update max, min and total variables
+	fputc('\n',outptr);
+	fprintf(outptr, "TOTAL SPENDING FOR EACH ITEM\n");
+
+	// Update max, min and total variables, and print total spending for items
 	while (trav -> next)
 	{
 		// create a buffer to store strings of doubles
@@ -250,6 +252,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Output monthly total, max and min spending for corresponding item to csv file
+	fputc('\n',outptr);
 	fprintf(outptr, "Max spending is %s: $%.2lf\n", max_str, max);
 	fprintf(outptr, "Min spending is %s: $%.2lf\n", min_str, min);
 	fprintf(outptr, "Total spending: $%.2lf\n", total);
