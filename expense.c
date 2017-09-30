@@ -6,6 +6,7 @@ Sums expenses of each item of a certain month
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "sllnode.h"
 
@@ -43,9 +44,9 @@ int main(int argc, char *argv[])
 	int days;
 
 	// bookkeeping variables
-	double total;
-	double max;
-	double min;
+	double total = 0;
+	double max = 0;
+	double min = INFINITY;
 
 	// convert year back to string
 	sprintf(year, "%d", year_digits);
@@ -142,15 +143,20 @@ int main(int argc, char *argv[])
 		// file read/write variables
 		char c = fgetc(inptr);
 		double dollar;
+		char charbuff[MAX_BUFF_SIZE];
+		char intbuff[MAX_BUFF_SIZE];
+		int arr_count;
 
 		// start file reading
 		while (!feof(inptr))
 		{			
-			// declare/reset read/write char buffer
-			char charbuff[MAX_BUFF_SIZE];
-			char intbuff[MAX_BUFF_SIZE];
-			int arr_count = 0;
-
+			arr_count = 0;
+			// reset read/write char buffer
+			for (int i = 0; i < MAX_BUFF_SIZE; i++)
+			{
+				charbuff[i] = '\0';
+				intbuff[i] = '\0';
+			}
 			// read item string
 			while (true)
 			{
@@ -195,33 +201,28 @@ int main(int argc, char *argv[])
 			// store row info of infile to sllnode
 			if (!append(head, charbuff, dollar))
 				head = insert(head, charbuff, dollar);
+
+			// read next character in file
+			c = fgetc(inptr);
 			
 		}
 
 		// close current input file
 		fclose(inptr);
 	}
-
-	// Rewind to beginning of the csv file
-	rewind(outptr);
 	
 	// Output total spendings for each item to csv file
-	// Initialize bookkeeping variables
 	sllnode *trav = head;
-	total = trav -> price;
-	max = trav -> price;
-	min = trav -> price;
-
-	while (trav -> next != NULL)
+	
+	while (strcmp(trav -> item, "None"))
 	{
 		// create a buffer to store strings of doubles
-		char sprice[MAX_BUFF_SIZE];
+		char sprice[10];
 
 		// append totals of each item to the file
-		trav = trav -> next;
 		fwrite(trav -> item, sizeof(trav -> item), 1, outptr);
 		fputc(',', outptr);
-		sprintf(sprice, "%.2lf", trav -> price); 
+		sprintf(sprice, "%.2lf", trav -> price);
 		fwrite(sprice, sizeof(sprice), 1, outptr);
 		fputc('\n', outptr);
 
@@ -231,10 +232,9 @@ int main(int argc, char *argv[])
 			max = trav -> price;
 		else if (trav -> price < min)
 			min = trav -> price;
-	}
 
-	rewind(outptr);
-	fputc('\n', outptr);
+		trav = trav -> next;
+	}
 
 	// Output monthly total, max and min spending for corresponding item to csv file
 	// TODO
