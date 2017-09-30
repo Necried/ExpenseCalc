@@ -1,0 +1,6 @@
+This program is still under construction. Here is a list of stuff to implement:
+1. Guard against buffer overflow: This prevents incorrect/malicious input
+2. Automate input textfiles with Python: No need for manual creation of expenses text files
+3. Create a web-based version of this implementation
+
+(Yes, I realize this would be made easier with database query languages and the like; but I need practice with C pointers)
