@@ -1,0 +1,87 @@
+#!/usr/bin/python3
+
+''' python script for creating daily expense text files and also for 
+compiling monthly expenses into csv file'''
+import sys
+import subprocess
+
+# define month constants in a list
+MONTH = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
+
+def main():
+	# catch user input
+	if len(sys.argv) != 3:
+		print("Usage: ./create [month] [year]")
+		exit(1)
+	if sys.argv[1] not in MONTH or len(sys.argv[2]) != 4:
+		print("Input not recognized")
+		print("Note: month must be typed in full in all lowercases, and year must also be in full")
+		print("Example: ./create october 2017")
+		exit(2)
+
+	# get user option for merge or create files
+	option = 0
+	while option != 2:
+		print("Select an option:\n1. create csv file\n2. create a new daily expense file")
+		option = int(input("(1/2): "))
+
+		# execute ./expense if its selected
+		if option == 1:
+			make(sys.argv[1],sys.argv[2])
+			exit(0)
+	
+	# get user input for day
+	print("You are about to create a text file recording expenses for " + sys.argv[1] + " " + sys.argv[2])
+	print("Appending is not supported (currently)! Any changes are saved as overwrites.")
+	day = int(input("Enter the day: "))
+
+	# catch bad day input
+	if day > 31 or day < 1:
+		print("Bad day input!")
+		exit(3)
+
+	# store month and year variables
+	month = sys.argv[1][:3].capitalize()
+	year = sys.argv[2][2:]
+	filename = str(day) + " " + month + " " + year +".txt"
+
+	# open a .txt file with corresponding user input for writing
+	infile = open(filename, "w")
+
+	# user input variable
+	usrinput = 0
+
+	# prompt user for input while it is needed
+	while usrinput != 2:
+		usrinput = int(input("Options:\n1. Write a new expense\n2.Close the file\nYour option: "))
+		if usrinput != 1:
+			continue
+	
+		item = input("Enter item name: ")
+		price = input("Enter item price: ")
+	
+		infile.write(item + ": " + price + "\n")
+
+	# close program
+	infile.close()
+	exit(0)
+
+def make(month, year):
+	'''Execute the C file expense.c to merge all daily spendings'''
+	subprocess.run(["./expense", month, year], stderr=subprocess.PIPE)
+	print("CSV file made.")
+
+	# prompt user for open csv or exit program
+	flag = True
+	while flag:
+		option = input("Open your csv file or exit program? (y/n): ")
+		if option == 'y':
+			flag = False
+			subprocess.run(["localc", "{}{}.csv".format(month, year[2:])])
+		elif option == 'n':
+			return None
+		else:
+			continue
+
+if __name__ == "__main__":
+	main()
